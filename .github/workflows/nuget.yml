@@ -1,0 +1,57 @@
+name: Publish Nuget Packages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+    tags:
+      - "7.0.*"
+    paths:
+      - "src/**"
+      - ".github/workflows/nuget.yml"
+
+jobs:
+  publish_nuget_packages:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup dotnet6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Setup dotnet7.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build and Pack
+        run: |
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Utils/OSharp.Utils.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp/OSharp.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.AspNetCore/OSharp.AspNetCore.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Authorization.Datas/OSharp.Authorization.Datas.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Authorization.Functions/OSharp.Authorization.Functions.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.AutoMapper/OSharp.AutoMapper.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore/OSharp.EntityFrameworkCore.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore.MySql/OSharp.EntityFrameworkCore.MySql.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore.Oracle/OSharp.EntityFrameworkCore.Oracle.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore.PostgreSql/OSharp.EntityFrameworkCore.PostgreSql.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore.Sqlite/OSharp.EntityFrameworkCore.Sqlite.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.EntityFrameworkCore.SqlServer/OSharp.EntityFrameworkCore.SqlServer.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Exceptionless/OSharp.Exceptionless.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Hangfire/OSharp.Hangfire.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Identity/OSharp.Identity.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Log4Net/OSharp.Log4Net.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.MiniProfiler/OSharp.MiniProfiler.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Redis/OSharp.Redis.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Swagger/OSharp.Swagger.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Wpf/OSharp.Wpf.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Hosting.Core/OSharp.Hosting.Core.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Hosting.EntityConfiguration/OSharp.Hosting.EntityConfiguration.csproj
+          dotnet pack -c Release --no-restore -o ./output ./src/OSharp.Hosting.Apis/OSharp.Hosting.Apis.csproj
+      - name: Publish Nupkg
+        uses: dansiegel/publish-nuget@v1.2
+        with:
+          filename: "./output/*.*nupkg"
+          apiKey: ${{ secrets.NUGET_LIULIUSOFT_API_KEY }}

@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="Startup.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2020 OSharp. All rights reserved.
 //  </copyright>
@@ -22,6 +22,7 @@ using OSharp.AspNetCore;
 using OSharp.AspNetCore.Routing;
 using OSharp.AutoMapper;
 using OSharp.Log4Net;
+using OSharp.MiniProfiler;
 using OSharp.Swagger;
 
 
@@ -32,10 +33,12 @@ namespace Liuliu.Demo.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddOSharp()
                 .AddPack<Log4NetPack>()
                 .AddPack<AutoMapperPack>()
                 .AddPack<EndpointsPack>()
+                .AddPack<MiniProfilerPack>()
                 .AddPack<SwaggerPack>()
                 //.AddPack<RedisPack>()
                 .AddPack<AuthenticationPack>()
@@ -47,12 +50,12 @@ namespace Liuliu.Demo.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(WebApplication app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {

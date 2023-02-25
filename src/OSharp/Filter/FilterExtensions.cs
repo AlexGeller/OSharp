@@ -1,39 +1,34 @@
 // -----------------------------------------------------------------------
-//  <copyright file="FilterExtensions.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="FilterExtensions.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-10 14:24</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Linq.Expressions;
+namespace OSharp.Filter;
 
-
-namespace OSharp.Filter
+/// <summary>
+/// æ•°æ®è¿‡æ»¤æ‰©å±•æ–¹æ³•
+/// </summary>
+public static class FilterExtensions
 {
     /// <summary>
-    /// Êı¾İ¹ıÂËÀ©Õ¹·½·¨
+    /// å°†æ¡ä»¶ç»„è½¬æ¢ä¸ºæŸ¥è¯¢è¡¨è¾¾å¼
     /// </summary>
-    public static class FilterExtensions
+    [Obsolete("ä½¿ç”¨ IFilterService æœåŠ¡ä»£æ›¿ï¼Œæ­¤ç±»å°†åœ¨1.0ç‰ˆæœ¬ä¸­ç§»é™¤")]
+    public static Expression<Func<TEntity, bool>> ToExpression<TEntity>(this FilterGroup group)
     {
-        /// <summary>
-        /// ½«Ìõ¼ş×é×ª»»Îª²éÑ¯±í´ïÊ½
-        /// </summary>
-        [Obsolete("Ê¹ÓÃ IFilterService ·şÎñ´úÌæ£¬´ËÀà½«ÔÚ1.0°æ±¾ÖĞÒÆ³ı")]
-        public static Expression<Func<TEntity, bool>> ToExpression<TEntity>(this FilterGroup group)
-        {
-            return FilterHelper.GetExpression<TEntity>(group);
-        }
+        return FilterHelper.GetExpression<TEntity>(group);
+    }
 
-        /// <summary>
-        /// ½«Ìõ¼ş×ª»»Îª²éÑ¯±í´ïÊ½
-        /// </summary>
-        [Obsolete("Ê¹ÓÃ IFilterService ·şÎñ´úÌæ£¬´ËÀà½«ÔÚ1.0°æ±¾ÖĞÒÆ³ı")]
-        public static Expression<Func<TEntity, bool>> ToExpression<TEntity>(this FilterRule rule)
-        {
-            return FilterHelper.GetExpression<TEntity>(rule);
-        }
+    /// <summary>
+    /// å°†æ¡ä»¶è½¬æ¢ä¸ºæŸ¥è¯¢è¡¨è¾¾å¼
+    /// </summary>
+    [Obsolete("ä½¿ç”¨ IFilterService æœåŠ¡ä»£æ›¿ï¼Œæ­¤ç±»å°†åœ¨1.0ç‰ˆæœ¬ä¸­ç§»é™¤")]
+    public static Expression<Func<TEntity, bool>> ToExpression<TEntity>(this FilterRule rule)
+    {
+        return FilterHelper.GetExpression<TEntity>(rule);
     }
 }

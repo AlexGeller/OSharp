@@ -1,148 +1,139 @@
-// -----------------------------------------------------------------------
-//  <copyright file="PropertyMetadata.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+ï»¿// -----------------------------------------------------------------------
+//  <copyright file="PropertyMetadata.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-06 12:31</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection;
+namespace OSharp.CodeGenerator;
 
-using OSharp.Reflection;
-
-
-namespace OSharp.CodeGenerator
+/// <summary>
+/// å±æ€§å…ƒæ•°æ®
+/// </summary>
+public class PropertyMetadata
 {
     /// <summary>
-    /// ÊôĞÔÔªÊı¾İ
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="PropertyMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
     /// </summary>
-    public class PropertyMetadata
+    public PropertyMetadata()
+    { }
+
+    /// <summary>
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="PropertyMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
+    /// </summary>
+    public PropertyMetadata(PropertyInfo property)
     {
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="PropertyMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public PropertyMetadata()
-        { }
-
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="PropertyMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public PropertyMetadata(PropertyInfo property)
+        if (property == null)
         {
-            if (property == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            Name = property.Name;
-            TypeName = property.PropertyType.FullName;
-            Display = property.GetDescription();
-            RequiredAttribute required = property.GetAttribute<RequiredAttribute>();
-            if (required != null)
+        Name = property.Name;
+        TypeName = property.PropertyType.FullName;
+        Display = property.GetDescription();
+        RequiredAttribute required = property.GetAttribute<RequiredAttribute>();
+        if (required != null)
+        {
+            IsRequired = !required.AllowEmptyStrings;
+        }
+        StringLengthAttribute stringLength = property.GetAttribute<StringLengthAttribute>();
+        if (stringLength != null)
+        {
+            MaxLength = stringLength.MaximumLength;
+            MinLength = stringLength.MinimumLength;
+        }
+        else
+        {
+            MaxLength = property.GetAttribute<MaxLengthAttribute>()?.Length;
+            MinLength = property.GetAttribute<MinLengthAttribute>()?.Length;
+        }
+        RangeAttribute range = property.GetAttribute<RangeAttribute>();
+        if (range != null)
+        {
+            Range = new[] { range.Minimum, range.Maximum };
+            Max = range.Maximum;
+            Min = range.Minimum;
+        }
+        IsNullable = property.PropertyType.IsNullableType();
+        if (IsNullable)
+        {
+            TypeName = property.PropertyType.GetUnNullableType().FullName;
+        }
+        //æšä¸¾ç±»å‹ï¼Œä½œä¸ºæ•°å€¼ç±»å‹è¿”å›
+        if (property.PropertyType.IsEnum)
+        {
+            Type enumType = property.PropertyType;
+            Array values = enumType.GetEnumValues();
+            Enum[] enumItems = values.Cast<Enum>().ToArray();
+            if (enumItems.Length > 0)
             {
-                IsRequired = !required.AllowEmptyStrings;
-            }
-            StringLengthAttribute stringLength = property.GetAttribute<StringLengthAttribute>();
-            if (stringLength != null)
-            {
-                MaxLength = stringLength.MaximumLength;
-                MinLength = stringLength.MinimumLength;
-            }
-            else
-            {
-                MaxLength = property.GetAttribute<MaxLengthAttribute>()?.Length;
-                MinLength = property.GetAttribute<MinLengthAttribute>()?.Length;
-            }
-            RangeAttribute range = property.GetAttribute<RangeAttribute>();
-            if (range != null)
-            {
-                Range = new[] { range.Minimum, range.Maximum };
-                Max = range.Maximum;
-                Min = range.Minimum;
-            }
-            IsNullable = property.PropertyType.IsNullableType();
-            if (IsNullable)
-            {
-                TypeName = property.PropertyType.GetUnNullableType().FullName;
-            }
-            //Ã¶¾ÙÀàĞÍ£¬×÷ÎªÊıÖµÀàĞÍ·µ»Ø
-            if (property.PropertyType.IsEnum)
-            {
-                Type enumType = property.PropertyType;
-                Array values = enumType.GetEnumValues();
-                Enum[] enumItems = values.Cast<Enum>().ToArray();
-                if (enumItems.Length > 0)
-                {
-                    EnumMetadatas = enumItems.Select(m => new EnumMetadata(m)).ToArray();
-                }
+                EnumMetadatas = enumItems.Select(m => new EnumMetadata(m)).ToArray();
             }
         }
+    }
         
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÊôĞÔÃû³Æ
-        /// </summary>
-        public string Name { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® å±æ€§åç§°
+    /// </summary>
+    public string Name { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÊôĞÔÀàĞÍÃû³Æ
-        /// </summary>
-        public string TypeName { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® å±æ€§ç±»å‹åç§°
+    /// </summary>
+    public string TypeName { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÏÔÊ¾Ãû³Æ
-        /// </summary>
-        public string Display { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æ˜¾ç¤ºåç§°
+    /// </summary>
+    public string Display { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÊÇ·ñ±ØĞë
-        /// </summary>
-        public bool? IsRequired { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æ˜¯å¦å¿…é¡»
+    /// </summary>
+    public bool? IsRequired { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ×î´ó³¤¶È
-        /// </summary>
-        public int? MaxLength { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æœ€å¤§é•¿åº¦
+    /// </summary>
+    public int? MaxLength { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ×îĞ¡³¤¶È
-        /// </summary>
-        public int? MinLength { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æœ€å°é•¿åº¦
+    /// </summary>
+    public int? MinLength { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ È¡Öµ·¶Î§
-        /// </summary>
-        public object[] Range { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® å–å€¼èŒƒå›´
+    /// </summary>
+    public object[] Range { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ×î´óÖµ
-        /// </summary>
-        public object Max { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æœ€å¤§å€¼
+    /// </summary>
+    public object Max { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ×îĞ¡Öµ
-        /// </summary>
-        public object Min { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æœ€å°å€¼
+    /// </summary>
+    public object Min { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÊÇ·ñÖµÀàĞÍ¿É¿Õ
-        /// </summary>
-        public bool IsNullable { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æ˜¯å¦å€¼ç±»å‹å¯ç©º
+    /// </summary>
+    public bool IsNullable { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ Ã¶¾ÙÔªÊı¾İ
-        /// </summary>
-        public EnumMetadata[] EnumMetadatas { get; set; }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æšä¸¾å…ƒæ•°æ®
+    /// </summary>
+    public EnumMetadata[] EnumMetadatas { get; set; }
 
-        /// <summary>
-        /// ÊÇ·ñÓĞÑéÖ¤ÊôĞÔ 
-        /// </summary>
-        public bool HasValidateAttribute()
-        {
-            return IsRequired.HasValue || MaxLength.HasValue || MinLength.HasValue || Range != null || Max != null || Min != null;
-        }
+    /// <summary>
+    /// æ˜¯å¦æœ‰éªŒè¯å±æ€§ 
+    /// </summary>
+    public bool HasValidateAttribute()
+    {
+        return IsRequired.HasValue || MaxLength.HasValue || MinLength.HasValue || Range != null || Max != null || Min != null;
     }
 }

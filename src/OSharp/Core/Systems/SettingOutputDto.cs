@@ -1,39 +1,35 @@
 // -----------------------------------------------------------------------
-//  <copyright file="SettingOutputDto.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="SettingOutputDto.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-24 17:26</last-date>
 // -----------------------------------------------------------------------
 
-using OSharp.Reflection;
+namespace OSharp.Core.Systems;
 
-
-namespace OSharp.Core.Systems
+/// <summary>
+/// è®¾ç½®è¾“å‡ºDTO
+/// </summary>
+public class SettingOutputDto
 {
     /// <summary>
-    /// ÉèÖÃÊä³öDTO
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="SettingOutputDto"/>ç±»å‹çš„æ–°å®ä¾‹
     /// </summary>
-    public class SettingOutputDto
+    public SettingOutputDto(ISetting setting)
     {
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="SettingOutputDto"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public SettingOutputDto(ISetting setting)
-        {
-            Setting = setting;
-            SettingTypeName = setting.GetType().GetFullNameWithModule();
-        }
-
-        /// <summary>
-        /// »ñÈ¡ ÉèÖÃÀàĞÍÈ«Ãû
-        /// </summary>
-        public string SettingTypeName { get; }
-
-        /// <summary>
-        /// »ñÈ¡ ÉèÖÃĞÅÏ¢
-        /// </summary>
-        public ISetting Setting { get; }
+        Setting = setting;
+        SettingTypeName = setting.GetType().GetFullNameWithModule();
     }
+
+    /// <summary>
+    /// è·å– è®¾ç½®ç±»å‹å…¨å
+    /// </summary>
+    public string SettingTypeName { get; }
+
+    /// <summary>
+    /// è·å– è®¾ç½®ä¿¡æ¯
+    /// </summary>
+    public ISetting Setting { get; }
 }

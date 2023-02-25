@@ -1,26 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../../build/public.props" />
   <Import Project="../../build/version.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageId>OSharpNS.EntityFrameworkCore.Oracle</PackageId>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <PackageId>OSharp.EntityFrameworkCore.Oracle</PackageId>
     <Description>OSharp 数据访问组件，封装EntityFrameworkCore的Oracle数据访问功能的实现</Description>
     <Summary>OSharp 数据访问组件Oracle</Summary>
     <RootNamespace>OSharp.Entity.Oracle</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\OSharp.EntityFrameworkCore.Oracle.xml</DocumentationFile>
-    <OutputPath>bin\Release</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Oracle.EntityFrameworkCore" Version="3.19.0-beta2" />
+  <ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="[6.21.61, 7.0.0)" />
   </ItemGroup>
-
   <ItemGroup>
+    <ProjectReference Include="..\OSharp.EntityFrameworkCore.MySql\OSharp.EntityFrameworkCore.MySql.csproj" />
     <ProjectReference Include="..\OSharp.EntityFrameworkCore\OSharp.EntityFrameworkCore.csproj" />
   </ItemGroup>
 

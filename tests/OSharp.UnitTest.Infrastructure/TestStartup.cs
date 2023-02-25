@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -12,8 +12,8 @@ namespace OSharp.UnitTest.Infrastructure
             services.AddLogging();
             services.AddOSharp();
         }
-
-        public virtual void Configure(IApplicationBuilder app)
+        
+        public virtual void Configure(WebApplication app)
         {
             app.UseOSharp();
         }

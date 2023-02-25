@@ -1,88 +1,80 @@
 // -----------------------------------------------------------------------
-//  <copyright file="EntityMetadata.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="EntityMetadata.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-06 12:25</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
+namespace OSharp.CodeGenerator;
 
-using OSharp.Reflection;
-
-
-namespace OSharp.CodeGenerator
+/// <summary>
+/// ç±»å‹å…ƒæ•°æ®
+/// </summary>
+public class TypeMetadata
 {
     /// <summary>
-    /// ÀàĞÍÔªÊı¾İ
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="TypeMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
     /// </summary>
-    public class TypeMetadata
+    public TypeMetadata()
+    { }
+
+    /// <summary>
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="TypeMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
+    /// </summary>
+    public TypeMetadata(Type type)
     {
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="TypeMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public TypeMetadata()
-        { }
-
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="TypeMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public TypeMetadata(Type type)
+        if (type == null)
         {
-            if (type == null)
-            {
-                return;
-            }
-
-            Name = type.Name;
-            FullName = type.FullName;
-            Namespace = type.Namespace;
-            Display = type.GetDescription().Replace("ĞÅÏ¢", "");
-            PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (PropertyInfo property in properties)
-            {
-                if (property.HasAttribute<IgnoreGenPropertyAttribute>())
-                {
-                    continue;
-                }
-                if (property.GetMethod.IsVirtual && !property.GetMethod.IsFinal)
-                {
-                    continue;
-                }
-                if (PropertyMetadatas == null)
-                {
-                    PropertyMetadatas = new List<PropertyMetadata>();
-                }
-                PropertyMetadatas.Add(new PropertyMetadata(property));
-            }
+            return;
         }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÀàĞÍÃû
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÀàĞÍÈ«Ãû
-        /// </summary>
-        public string FullName { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÃüÃû¿Õ¼ä
-        /// </summary>
-        public string Namespace { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÀàĞÍÏÔÊ¾Ãû
-        /// </summary>
-        public string Display { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÊôĞÔÔªÊı¾İ¼¯ºÏ
-        /// </summary>
-        public IList<PropertyMetadata> PropertyMetadatas { get; set; }
+        Name = type.Name;
+        FullName = type.FullName;
+        Namespace = type.Namespace;
+        Display = type.GetDescription().Replace("ä¿¡æ¯", "");
+        PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        foreach (PropertyInfo property in properties)
+        {
+            if (property.HasAttribute<IgnoreGenPropertyAttribute>())
+            {
+                continue;
+            }
+            if (property.GetMethod.IsVirtual && !property.GetMethod.IsFinal)
+            {
+                continue;
+            }
+            if (PropertyMetadatas == null)
+            {
+                PropertyMetadatas = new List<PropertyMetadata>();
+            }
+            PropertyMetadatas.Add(new PropertyMetadata(property));
+        }
     }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® ç±»å‹å
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® ç±»å‹å…¨å
+    /// </summary>
+    public string FullName { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® å‘½åç©ºé—´
+    /// </summary>
+    public string Namespace { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® ç±»å‹æ˜¾ç¤ºå
+    /// </summary>
+    public string Display { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® å±æ€§å…ƒæ•°æ®é›†åˆ
+    /// </summary>
+    public IList<PropertyMetadata> PropertyMetadatas { get; set; }
 }

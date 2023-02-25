@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Shouldly;
 
@@ -12,6 +12,10 @@ namespace OSharp.Develop.Tests
         [Fact]
         public void Ram_Test()
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                return;
+            }
             CodeRamer.Initialize();
             string output = CodeRamer.Ram("name",
                 () =>

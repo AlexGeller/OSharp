@@ -1,31 +1,27 @@
 // -----------------------------------------------------------------------
-//  <copyright file="SettingInputDto.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="SettingInputDto.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-24 17:21</last-date>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
+namespace OSharp.Core.Systems;
 
-
-namespace OSharp.Core.Systems
+/// <summary>
+/// è®¾ç½®ä¿¡æ¯è¾“å…¥DTO
+/// </summary>
+public class SettingInputDto
 {
     /// <summary>
-    /// ÉèÖÃĞÅÏ¢ÊäÈëDTO
+    /// è·å–æˆ–è®¾ç½® è®¾ç½®ç±»å‹å…¨å
     /// </summary>
-    public class SettingInputDto
-    {
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÉèÖÃÀàĞÍÈ«Ãû
-        /// </summary>
-        [Required]
-        public string SettingTypeName { get; set; }
+    [Required]
+    public string SettingTypeName { get; set; }
 
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÉèÖÃÄ£ĞÍJSON
-        /// </summary>
-        public string SettingJson { get; set; }
-    }
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® è®¾ç½®æ¨¡å‹JSON
+    /// </summary>
+    public string SettingJson { get; set; }
 }

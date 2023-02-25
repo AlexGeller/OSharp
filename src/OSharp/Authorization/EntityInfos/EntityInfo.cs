@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="EntityInfo.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2020 OSharp. All rights reserved.
 //  </copyright>
@@ -7,18 +7,12 @@
 //  <last-date>2020-02-10 20:14</last-date>
 // -----------------------------------------------------------------------
 
-using System.ComponentModel;
+namespace OSharp.Authorization.EntityInfos;
 
-using OSharp.Entity;
-
-
-namespace OSharp.Authorization.EntityInfos
-{
-    /// <summary>
-    /// 实体类：实体信息类
-    /// </summary>
-    [Description("实体信息类")]
-    [TableNamePrefix("Auth")]
-    public class EntityInfo : EntityInfoBase
-    { }
-}
+/// <summary>
+/// 实体类：实体信息类
+/// </summary>
+[Description("实体信息类")]
+[TableNamePrefix("Auth")]
+public class EntityInfo : EntityInfoBase
+{ }

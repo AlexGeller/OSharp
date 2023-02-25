@@ -1,73 +1,59 @@
 // -----------------------------------------------------------------------
-//  <copyright file="EntityHashExtensions.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="EntityHashExtensions.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-12 10:09</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+namespace OSharp.Entity;
 
-using OSharp.Collections;
-using OSharp.Core.Data;
-using OSharp.Core.Systems;
-using OSharp.Extensions;
-
-
-namespace OSharp.Entity
+/// <summary>
+/// å®ä½“Hashæ‰©å±•æ–¹æ³•
+/// </summary>
+public static class EntityHashExtensions
 {
     /// <summary>
-    /// ÊµÌåHashÀ©Õ¹·½·¨
+    /// æ£€æŸ¥æŒ‡å®šå®ä½“çš„Hashå€¼ï¼Œå†³å®šæ˜¯å¦éœ€è¦è¿›è¡Œæ•°æ®åº“åŒæ­¥
     /// </summary>
-    public static class EntityHashExtensions
+    /// <returns>åŒæ­¥è¿”å›trueï¼Œä¸åŒæ­¥è¿”å›false</returns>
+    public static bool CheckSyncByHash(this IEnumerable<IEntityHash> entityHashes, IServiceProvider provider, ILogger logger)
     {
-        /// <summary>
-        /// ¼ì²éÖ¸¶¨ÊµÌåµÄHashÖµ£¬¾ö¶¨ÊÇ·ñĞèÒª½øĞĞÊı¾İ¿âÍ¬²½
-        /// </summary>
-        public static bool CheckSyncByHash(this IEnumerable<IEntityHash> entityHashes, IServiceProvider provider, ILogger logger)
+        IEntityHash[] hashes = entityHashes as IEntityHash[] ?? entityHashes.ToArray();
+        if (hashes.Length == 0)
         {
-            IEntityHash[] hashes = entityHashes as IEntityHash[] ?? entityHashes.ToArray();
-            if (hashes.Length == 0)
-            {
-                return false;
-            }
-            string hash = hashes.Select(m => m.GetHash()).ExpandAndToString().ToMd5Hash();
-            IKeyValueStore store = provider.GetService<IKeyValueStore>();
-            string entityType = hashes[0].GetType().FullName;
-            string key = $"OSharp.Initialize.SyncToDatabaseHash-{entityType}";
-            IKeyValue keyValue = store.GetKeyValue(key);
-            if (keyValue != null && keyValue.Value?.ToString() == hash)
-            {
-                logger.LogInformation($"{hashes.Length}Ìõ»ù´¡Êı¾İ¡°{entityType}¡±µÄÄÚÈİÇ©Ãû {hash} ÓëÉÏ´ÎÏàÍ¬£¬È¡ÏûÊı¾İ¿âÍ¬²½");
-                return false;
-            }
-
-            store.CreateOrUpdateKeyValue(key, hash).GetAwaiter().GetResult();
-            logger.LogInformation($"{hashes.Length}Ìõ»ù´¡Êı¾İ¡°{entityType}¡±µÄÄÚÈİÇ©Ãû {hash} ÓëÉÏ´Î {keyValue?.Value} ²»Í¬£¬½«½øĞĞÊı¾İ¿âÍ¬²½");
-            return true;
+            return false;
+        }
+        string hash = hashes.Select(m => m.GetHash()).ExpandAndToString().ToMd5Hash();
+        IKeyValueStore store = provider.GetService<IKeyValueStore>();
+        string entityType = hashes[0].GetType().FullName;
+        string key = $"OSharp.Initialize.SyncToDatabaseHash-{entityType}";
+        IKeyValue keyValue = store.GetByKey(key);
+        if (keyValue != null && keyValue.Value?.ToString() == hash)
+        {
+            logger.LogInformation($"{hashes.Length}æ¡åŸºç¡€æ•°æ®â€œ{entityType}â€çš„å†…å®¹ç­¾å {hash} ä¸ä¸Šæ¬¡ç›¸åŒï¼Œå–æ¶ˆæ•°æ®åº“åŒæ­¥");
+            return false;
         }
 
-        /// <summary>
-        /// »ñÈ¡Ö¸¶¨ÊµÌåµÄHashÖµ
-        /// </summary>
-        /// <param name="entity">ÊµÌå¶ÔÏó</param>
-        public static string GetHash(this IEntityHash entity)
+        store.CreateOrUpdate(key, hash).GetAwaiter().GetResult();
+        logger.LogInformation($"{hashes.Length}æ¡åŸºç¡€æ•°æ®â€œ{entityType}â€çš„å†…å®¹ç­¾å {hash} ä¸ä¸Šæ¬¡ {keyValue?.Value} ä¸åŒï¼Œå°†è¿›è¡Œæ•°æ®åº“åŒæ­¥");
+        return true;
+    }
+
+    /// <summary>
+    /// è·å–æŒ‡å®šå®ä½“çš„Hashå€¼
+    /// </summary>
+    /// <param name="entity">å®ä½“å¯¹è±¡</param>
+    public static string GetHash(this IEntityHash entity)
+    {
+        Type type = entity.GetType();
+        StringBuilder sb = new StringBuilder();
+        foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(m => m.CanWrite && m.Name != "Id"))
         {
-            Type type = entity.GetType();
-            StringBuilder sb = new StringBuilder();
-            foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(m => m.CanWrite && m.Name != "Id"))
-            {
-                sb.Append(property.GetValue(entity));
-            }
-            return sb.ToString().ToMd5Hash();
+            sb.Append(property.GetValue(entity));
         }
+        return sb.ToString().ToMd5Hash();
     }
 }

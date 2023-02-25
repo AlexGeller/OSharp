@@ -69,15 +69,21 @@ namespace Liuliu.Demo.Web.Hangfire
         public async Task<string> LockUser2()
         {
             List<string> list = new List<string>();
-            UserManager<User> userManager = _provider.GetService<UserManager<User>>();
-            User user2 = await userManager.FindByIdAsync("2");
-            list.Add($"user2.IsLocked: {user2.IsLocked}");
-            user2.IsLocked = !user2.IsLocked;
-            await userManager.UpdateAsync(user2);
-            IUnitOfWork unitOfWork = _provider.GetUnitOfWork<User, int>();
-            unitOfWork.Commit();
+            UserManager<User> userManager = _provider.GetRequiredService<UserManager<User>>();
+            User? user2 = await userManager.FindByIdAsync("2");
+            if (user2 != null)
+            {
+                list.Add($"user2.IsLocked: {user2.IsLocked}");
+                user2.IsLocked = !user2.IsLocked;
+                await userManager.UpdateAsync(user2);
+                IUnitOfWork unitOfWork = _provider.GetUnitOfWork(true);
+                await unitOfWork.CommitAsync();
+            }
             user2 = await userManager.FindByIdAsync("2");
-            list.Add($"user2.IsLocked: {user2.IsLocked}");
+            if (user2 != null)
+            {
+                list.Add($"user2.IsLocked: {user2.IsLocked}");
+            }
             return list.ExpandAndToString();
         }
     }

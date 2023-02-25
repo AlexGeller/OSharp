@@ -1,4 +1,4 @@
-// -----------------------------------------------------------------------
+﻿// -----------------------------------------------------------------------
 //  <copyright file="CommonController.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
@@ -68,7 +68,7 @@ namespace Liuliu.Demo.Web.Controllers
                 RandomPosition = true
             };
             Bitmap bitmap = coder.CreateImage(4, out string code);
-            _verifyCodeService.SetCode(code, out string id);
+            string id = _verifyCodeService.SetCode(code);
             return _verifyCodeService.GetImageString(bitmap, id);
         }
 
@@ -104,7 +104,7 @@ namespace Liuliu.Demo.Web.Controllers
                 await file.CopyToAsync(fs);
             }
 
-            return new AjaxResult("上传成功", AjaxResultType.Success, $"upload-files/{fileName}");
+            return new AjaxResult("上传成功", AjaxResultType.Success, content:$"upload-files/{fileName}");
         }
 
         /// <summary>

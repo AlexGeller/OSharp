@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="IdentityService.UserRole.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
@@ -54,7 +54,7 @@ namespace Liuliu.Demo.Identity
         /// <returns>业务操作结果</returns>
         public async Task<OperationResult> UpdateUserRoles(params UserRoleInputDto[] dtos)
         {
-            Check.Validate<UserRoleInputDto,Guid>(dtos, nameof(dtos));
+            Check2.Validate<UserRoleInputDto,Guid>(dtos, nameof(dtos));
 
             List<string> userNames = new List<string>();
             OperationResult result = await _userRoleRepository.UpdateAsync(dtos,
@@ -67,7 +67,7 @@ namespace Liuliu.Demo.Identity
             if (result.Succeeded && userNames.Count > 0)
             {
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData() { UserNames = userNames.ToArray() };
-                _eventBus.Publish(eventData);
+                await _eventBus.PublishAsync(eventData);
             }
             return result;
         }
@@ -90,7 +90,7 @@ namespace Liuliu.Demo.Identity
             if (result.Succeeded && userNames.Count > 0)
             {
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData(){UserNames = userNames.ToArray()};
-                _eventBus.Publish(eventData);
+                await _eventBus.PublishAsync(eventData);
             }
 
             return result;
@@ -135,7 +135,7 @@ namespace Liuliu.Demo.Identity
 
                 //更新用户缓存使角色生效
                 OnlineUserCacheRemoveEventData eventData = new OnlineUserCacheRemoveEventData() { UserNames = new[] { user.UserName } };
-                _eventBus.Publish(eventData);
+                await _eventBus.PublishAsync(eventData);
             }
             catch (InvalidOperationException ex)
             {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Shouldly;
 
@@ -11,6 +11,10 @@ namespace OSharp.Develop.Tests
         [Fact]
         public void Time_Test()
         {
+            if (!OperatingSystem.IsWindows())
+            {
+                return;
+            }
             CodeTimer.Initialize();
             string output = CodeTimer.Time("name", 10000, () =>
             {

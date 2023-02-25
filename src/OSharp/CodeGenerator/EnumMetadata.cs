@@ -1,57 +1,51 @@
 // -----------------------------------------------------------------------
-//  <copyright file="EnumMetadata.cs" company="OSharp¿ªÔ´ÍÅ¶Ó">
+//  <copyright file="EnumMetadata.cs" company="OSharpå¼€æºå›¢é˜Ÿ">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
-//  <last-editor>¹ùÃ÷·æ</last-editor>
+//  <last-editor>éƒ­æ˜é”‹</last-editor>
 //  <last-date>2018-08-06 12:44</last-date>
 // -----------------------------------------------------------------------
 
-using System;
+namespace OSharp.CodeGenerator;
 
-using OSharp.Extensions;
-
-
-namespace OSharp.CodeGenerator
+/// <summary>
+/// æšä¸¾ç±»å‹å…ƒæ•°æ®
+/// </summary>
+public class EnumMetadata
 {
     /// <summary>
-    /// Ã¶¾ÙÀàĞÍÔªÊı¾İ
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="EnumMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
     /// </summary>
-    public class EnumMetadata
+    public EnumMetadata()
+    { }
+
+    /// <summary>
+    /// åˆå§‹åŒ–ä¸€ä¸ª<see cref="EnumMetadata"/>ç±»å‹çš„æ–°å®ä¾‹
+    /// </summary>
+    public EnumMetadata(Enum enumItem)
     {
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="EnumMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public EnumMetadata()
-        { }
-
-        /// <summary>
-        /// ³õÊ¼»¯Ò»¸ö<see cref="EnumMetadata"/>ÀàĞÍµÄĞÂÊµÀı
-        /// </summary>
-        public EnumMetadata(Enum enumItem)
+        if (enumItem == null)
         {
-            if (enumItem == null)
-            {
-                return;
-            }
-            Value = enumItem.CastTo<int>();
-            Name = enumItem.ToString();
-            Display = enumItem.ToDescription();
+            return;
         }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ Ã¶¾ÙÖµ
-        /// </summary>
-        public int Value { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ Ã¶¾ÙÃû
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// »ñÈ¡»òÉèÖÃ ÏÔÊ¾Ãû³Æ
-        /// </summary>
-        public string Display { get; set; }
+        Value = enumItem.CastTo<int>();
+        Name = enumItem.ToString();
+        Display = enumItem.ToDescription();
     }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æšä¸¾å€¼
+    /// </summary>
+    public int Value { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æšä¸¾å
+    /// </summary>
+    public string Name { get; set; }
+
+    /// <summary>
+    /// è·å–æˆ–è®¾ç½® æ˜¾ç¤ºåç§°
+    /// </summary>
+    public string Display { get; set; }
 }

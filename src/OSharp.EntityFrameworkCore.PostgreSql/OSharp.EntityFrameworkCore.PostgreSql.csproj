@@ -1,23 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../../build/public.props" />
   <Import Project="../../build/version.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageId>OSharpNS.EntityFrameworkCore.PostgreSql</PackageId>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <PackageId>OSharp.EntityFrameworkCore.PostgreSql</PackageId>
     <Description>OSharp 数据访问组件，封装EntityFrameworkCore的PostgreSql数据访问功能的实现</Description>
     <Summary>OSharp 数据访问组件PostgreSql</Summary>
     <RootNamespace>OSharp.Entity.PostgreSql</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\OSharp.EntityFrameworkCore.PostgreSql.xml</DocumentationFile>
-    <OutputPath>bin\Release</OutputPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+  <ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[6.0.7, 7.0.0)" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net7.0'">
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[7.0.0, 8.0.0)" />
   </ItemGroup>
 
   <ItemGroup>

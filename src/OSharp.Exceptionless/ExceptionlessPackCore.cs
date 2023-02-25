@@ -1,26 +1,11 @@
-﻿// -----------------------------------------------------------------------
-//  <copyright file="ExceptionlessPack.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2019 OSharp. All rights reserved.
+// -----------------------------------------------------------------------
+//  <copyright file="ExceptionlessPackCore.cs" company="OSharp开源团队">
+//      Copyright (c) 2014-2022 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
 //  <last-editor>郭明锋</last-editor>
-//  <last-date>2019-02-28 1:42</last-date>
+//  <last-date>2022-11-10 19:10</last-date>
 // -----------------------------------------------------------------------
-
-using System;
-
-using Exceptionless;
-
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
-using OSharp.AspNetCore;
-using OSharp.Core.Packs;
-using OSharp.Exceptions;
-using OSharp.Extensions;
-
 
 namespace OSharp.Exceptionless
 {
@@ -57,9 +42,10 @@ namespace OSharp.Exceptionless
         /// 应用AspNetCore的服务业务
         /// </summary>
         /// <param name="app">Asp应用程序构建器</param>
-        public override void UsePack(IApplicationBuilder app)
+        public override void UsePack(WebApplication app)
         {
-            IConfiguration configuration = app.ApplicationServices.GetService<IConfiguration>();
+            IServiceProvider provider = app.Services;
+            IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
             bool enabled = configuration["OSharp:Exceptionless:Enabled"].CastTo(false);
             if (!enabled)
             {
@@ -81,8 +67,7 @@ namespace OSharp.Exceptionless
 
             app.UseExceptionless();
 
-            UsePack(app.ApplicationServices);
+            UsePack(provider);
         }
-
     }
 }

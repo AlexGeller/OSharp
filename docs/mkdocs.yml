@@ -1,0 +1,99 @@
+# project information
+site_name: OSharp文档中心
+site_description: OSharp快速开发框架文档中心, .NetCore 快速开发框架
+site_author: osharp.org
+site_url: https://docs.osharp.org
+repo_name: dotnetcore/osharp
+repo_url: https://github.com/dotnetcore/osharp/
+edit_uri: "edit/master/docs/docs/"
+dev_addr: 127.0.0.1:4205
+copyright: Copyright &copy; 2014 - 2022 OSHARP.ORG
+# active material-theme
+theme:
+  name: material
+  language: zh
+  favicon: assets/favicon.ico
+  logo: assets/logo.svg
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    # - navigation.expand
+    - navigation.top
+    - announce.dismiss
+    - header.autohide
+    - content.code.annotate
+  font:
+    text: Roboto
+    code: Roboto Mono
+# customization
+extra:
+  social:
+    - icon: fontawesome/brands/houzz
+      link: https://www.osharp.org/
+    - icon: fontawesome/brands/github
+      link: https://github.com/dotnetcore/osharp/
+    - icon: fontawesome/brands/chromecast
+      link: https://www.cnblogs.com/guomingfeng/
+# css, js
+extra_css:
+  - "assets/css/custom.css"
+extra_javascript:
+  - "assets/js/jquery.min.js"
+  - "assets/js/custom.js"
+# plugins
+plugins:
+  - search
+  - glightbox
+  - awesome-pages
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+      js_files:
+        - assets/js/custom.js
+      css_files:
+        - assets/css/custom.css
+# extensions
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - meta
+  - toc:
+      permalink: true
+  - codehilite:
+      guess_lang: false
+      linenums: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      auto_title: true
+      linenums: true
+      linenums_style: pymdownx-inline
+      use_pygments: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde

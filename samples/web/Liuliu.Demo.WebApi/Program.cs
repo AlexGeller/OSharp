@@ -1,30 +1,19 @@
 ﻿// -----------------------------------------------------------------------
 //  <copyright file="Program.cs" company="OSharp开源团队">
-//      Copyright (c) 2014-2020 OSharp. All rights reserved.
+//      Copyright (c) 2014-2022 OSharp. All rights reserved.
 //  </copyright>
 //  <site>http://www.osharp.org</site>
 //  <last-editor>郭明锋</last-editor>
-//  <last-date>2020-06-02 11:32</last-date>
+//  <last-date>2022-11-10 13:47</last-date>
 // -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Liuliu.Demo.Web;
 
+var builder = WebApplication.CreateBuilder(args);
 
-namespace Liuliu.Demo.Web
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+Startup startup = new Startup();
+startup.ConfigureServices(builder.Services);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+var app = builder.Build();
+startup.Configure(app);
+app.Run();

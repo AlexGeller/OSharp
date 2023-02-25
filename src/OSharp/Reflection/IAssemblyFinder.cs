@@ -7,19 +7,12 @@
 //  <last-date>2017-08-15 23:25</last-date>
 // -----------------------------------------------------------------------
 
-using System.Reflection;
 
-using OSharp.Dependency;
-using OSharp.Finders;
+namespace OSharp.Reflection;
 
-
-
-namespace OSharp.Reflection
-{
-    /// <summary>
-    /// 定义程序集查找器
-    /// </summary>
-    [IgnoreDependency]
-    public interface IAssemblyFinder : IFinder<Assembly>
-    { }
-}
+/// <summary>
+/// 定义程序集查找器
+/// </summary>
+[IgnoreDependency]
+public interface IAssemblyFinder : IFinder<Assembly>
+{ }

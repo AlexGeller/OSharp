@@ -11,24 +11,17 @@
 //  <last-editor>郭明锋</last-editor>
 // -----------------------------------------------------------------------
 
-using OSharp.Filter;
+namespace OSharp.Hosting.Apis.Areas.Admin.Controllers;
 
-using OSharp.Hosting.Infos;
-
-
-namespace OSharp.Hosting.Apis.Areas.Admin.Controllers
+/// <summary>
+/// 管理控制器: 站内信回复信息
+/// </summary>
+public class MessageReplyController : MessageReplyControllerBase
 {
     /// <summary>
-    /// 管理控制器: 站内信回复信息
+    /// 初始化一个<see cref="MessageReplyController"/>类型的新实例
     /// </summary>
-    public class MessageReplyController : MessageReplyControllerBase
-    {
-        /// <summary>
-        /// 初始化一个<see cref="MessageReplyController"/>类型的新实例
-        /// </summary>
-        public MessageReplyController(IInfosContract infosContract,
-            IFilterService filterService)
-            : base(infosContract, filterService)
-        { }
-    }
+    public MessageReplyController(IServiceProvider provider)
+        : base(provider)
+    { }
 }

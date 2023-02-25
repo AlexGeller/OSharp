@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 //  <copyright file="HangfireJobRunner.cs" company="OSharp开源团队">
 //      Copyright (c) 2014-2018 OSharp. All rights reserved.
 //  </copyright>
@@ -70,13 +70,13 @@ namespace Liuliu.Demo.Web.Hangfire
         public async Task<string> LockUser2()
         {
             List<string> list = new List<string>();
-            UserManager<User> userManager = _provider.GetService<UserManager<User>>();
+            UserManager<User> userManager = _provider.GetRequiredService<UserManager<User>>();
             User user2 = await userManager.FindByIdAsync("2");
             list.Add($"user2.IsLocked: {user2.IsLocked}");
             user2.IsLocked = !user2.IsLocked;
+            IUnitOfWork unitOfWork = _provider.GetUnitOfWork(true);
             await userManager.UpdateAsync(user2);
-            IUnitOfWork unitOfWork = _provider.GetUnitOfWork<User, int>();
-            unitOfWork.Commit();
+            await unitOfWork.CommitAsync();
             user2 = await userManager.FindByIdAsync("2");
             list.Add($"user2.IsLocked: {user2.IsLocked}");
             return list.ExpandAndToString();
